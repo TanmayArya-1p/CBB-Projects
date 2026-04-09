@@ -1,8 +1,8 @@
 # Computational Biology and Bioinformatics Projects
 
-This repository lists computational biology and bioinformatics projects and
-corresponding data sources to experience how existing packages help you answer
-important questions and curiosities.
+These are my submissions for the [BEE-102 course assignment](https://github.com/satyanarayan-rao/CBB-Projects)
 
-Please navigate to relevant diretories to learn questions being asked and how
-to address them. 
+### TODO:
+- [x] Gene Enrichment
+- [ ] PCA
+- [ ] HMM
