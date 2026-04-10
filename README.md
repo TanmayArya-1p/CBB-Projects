@@ -4,5 +4,5 @@ These are my submissions for the [BEE-102 course assignment](https://github.com/
 
 ### TODO:
 - [x] Gene Enrichment
-- [ ] PCA
-- [ ] HMM
+- [X] PCA
+- [X] HMM
