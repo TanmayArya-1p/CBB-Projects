@@ -1,12 +1,16 @@
-import gzip
+valid_chroms = set({str(i) for i in range(1, 23)} | {'X', 'Y', 'MT'})
 
-with gzip.open('human_gene_annotation.tsv.gz', 'rt') as fin, open('promoters.bed', 'w') as fout:
-    next(fin)
-    for line in fin:
-        cols = line.strip().split('\t')
+with open('human_gene_annotation.tsv', 'r') as fin, open('tss_start_sites.bed', 'w') as fout:
+    for line in fin.readlines()[1:]:
+        cols = line.strip().split()
         if len(cols) < 8:
             continue
-        chrom = "chr" + cols[4]
+
+        raw_chrom = cols[4]
+        if raw_chrom not in valid_chroms:
+            continue
+
+        chrom = "chr" + raw_chrom
         if chrom == "chrMT":
             chrom = "chrM"
 
@@ -14,11 +18,4 @@ with gzip.open('human_gene_annotation.tsv.gz', 'rt') as fin, open('promoters.bed
         tss = int(cols[7])
         gene_name = cols[6]
 
-        if strand == "+":
-            start = max(0, tss - 1000)
-            end = tss
-        else:
-            start = tss
-            end = tss + 1000
-
-        fout.write(f"{chrom}\t{start}\t{end}\t{gene_name}\t.\t{strand}\n")
+        fout.write(f"{chrom}\t{tss}\t{tss + 1}\t{gene_name}\t.\t{strand}\n")

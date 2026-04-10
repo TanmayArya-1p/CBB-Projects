@@ -1,24 +1,34 @@
-run: gene_enrichment_plot.pdf
+.PHONY: clean all
 
-hg38.fa:
-	wget https://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.fa.gz
-	gunzip hg38.fa.gz
+all: gene_enrichment_plot.png
 
-promoters.bed: human_gene_annotation.tsv.gz parse_annotation.py
+tss_start_sites.bed: parse_annotation.py human_gene_annotation.tsv
 	python parse_annotation.py
 
-promoters.fasta: hg38.fa promoters.bed
-	bedtools getfasta -fi hg38.fa -bed promoters.bed -s -nameOnly > promoters.fasta
+promoters.bed: tss_start_sites.bed hg38.chrom.sizes
+	bedtools slop -i tss_start_sites.bed -g hg38.chrom.sizes -l 500 -r 0 -s > promoters.bed
 
-cre_hits.gff: promoters.fasta
-	dreg -sequence promoters.fasta -pattern "TGACGTCA" -outfile cre_hits.gff -rformat gff
+promoters.fa: promoters.bed hg38.fa
+	bedtools getfasta -fi hg38.fa -bed promoters.bed -s -nameOnly > promoters.fa
+
+cre_hits.gff: promoters.fa
+	dreg -sequence promoters.fa -pattern "TGACGTCA" -outfile cre_hits.gff -rformat gff
 
 gene_list.txt: cre_hits.gff parse_hits.py
 	python parse_hits.py
-	sed -i 's/(+)//g; s/(-)//g' gene_list.txt
 
-gene_enrichment_plot.pdf: gene_list.txt run_go.R
+gene_enrichment_plot.png: gene_list.txt run_go.R
 	Rscript run_go.R
 
+human_gene_annotation.tsv: human_gene_annotation.tsv.gz
+	gunzip -k human_gene_annotation.tsv.gz
+
+hg38.fa: hg38.fa.gz
+	gunzip -k hg38.fa.gz
+
+hg38.chrom.sizes:
+	wget -O hg38.chrom.sizes https://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes
+
+
 clean:
-	rm -f promoters.bed promoters.fasta cre_hits.gff gene_list.txt gene_enrichment_plot.pdf
+	rm -f tss_start_sites.bed promoters.bed promoters.fa cre_hits.gff gene_list.txt gene_enrichment_plot.png hg38.chrom.sizes hg38.fa hg38.fa.fai
