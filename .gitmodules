@@ -1,0 +1,12 @@
+[submodule "GO_Enrichment"]
+	path = GO_Enrichment
+	url = git@github.com:TanmayArya-1p/GO_Enrichment.git
+[submodule "PCA_Gene_Expression"]
+	path = PCA_Gene_Expression
+	url = git@github.com:TanmayArya-1p/PCA_Gene_Expression.git
+[submodule "ViterbiHMM"]
+	path = ViterbiHMM
+	url = git@github.com:TanmayArya-1p/ViterbiHMM.git
+[submodule "Gene2protein"]
+	path = Gene2protein
+	url = git@github.com:TanmayArya-1p/Gene2protein.git
