@@ -3,6 +3,7 @@
 These are my submissions for the [BEE-102 course assignment](https://github.com/satyanarayan-rao/CBB-Projects)
 
 ### TODO:
+- [ ] Gene2Protein
 - [x] Gene Enrichment
 - [X] PCA
 - [X] HMM
